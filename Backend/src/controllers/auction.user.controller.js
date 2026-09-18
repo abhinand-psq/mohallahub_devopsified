@@ -12,7 +12,7 @@ export const getMyAuctions = async (req, res, next) => {
     const limit = parseInt(req.query.limit || "20");
     const skip = (page - 1) * limit;
 
-    // Fetch auctions created by this user
+   
     const auctions = await Auction.find({ createdBy: userId }).populate("winningBid","amount").populate("winner", "email username")
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -22,13 +22,11 @@ export const getMyAuctions = async (req, res, next) => {
     const now = new Date();
 
 
-
-    // Attach computed status + highest bid info
     for (let item of auctions) {
       console.log('df' , item.isClosed);
                      let status;
 if (item.isClosed === true) {
-    status = "ended";        // manual or natural end
+    status = "ended";     
 } else {
     const now = new Date();
     if (now < item.auctionStartTime) status = "scheduled";
